@@ -9,7 +9,7 @@ use App\Http\Controllers\TicketController;
 // GET    /api/tickets/{ticket}  -> TicketController@show 
 // PUT    /api/tickets/{ticket}  -> TicketController@update 
 // DELETE /api/tickets/{ticket}  -> TicketController@destroy 
-Route::apiResource('tickets', TicketController::class); 
+Route::apiResource('tickets', TicketController::class)->names('api.tickets');
  
 // Ruta adicional para actualizar solo el status:
 Route::patch('tickets/{ticket}/status', [TicketController::class, 'updateStatus']); 
