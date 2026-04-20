@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+        'vision_model' => env('OPENAI_VISION_MODEL', 'gpt-4.1-mini'),
+        'summary_model' => env('OPENAI_SUMMARY_MODEL', 'gpt-4.1-mini'),
+        'http_timeout' => env('OPENAI_HTTP_TIMEOUT', 20),
+        'connect_timeout' => env('OPENAI_CONNECT_TIMEOUT', 5),
+        'http_retries' => env('OPENAI_HTTP_RETRIES', 0),
+    ],
+
 ];

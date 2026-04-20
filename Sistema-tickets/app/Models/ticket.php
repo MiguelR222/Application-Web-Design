@@ -31,6 +31,7 @@ protected $fillable = [
 'fecha_resolucion', 
 'comentarios_tecnico', 
 'status', 
+'ai_executive_summary',
 ]; 
 /** 
 * Casting automatico de tipos. 
@@ -42,4 +43,9 @@ protected $casts = [
 'fecha_promesa'    => 'datetime', 
 'fecha_resolucion' => 'datetime', 
 ]; 
+
+public function attachments()
+{
+return $this->hasMany(TicketAttachment::class);
+}
 }

@@ -14,6 +14,13 @@
 				</div>
 
 				<div class="card-body">
+					@if ($ticket->ai_executive_summary)
+						<div class="alert alert-info">
+							<strong>Resumen ejecutivo IA:</strong>
+							<p class="mb-0 mt-2">{{ $ticket->ai_executive_summary }}</p>
+						</div>
+					@endif
+
 					<div class="row g-3">
 						<div class="col-md-6">
 							<p class="mb-1 text-muted small">Cliente</p>
@@ -78,6 +85,57 @@
 							<p class="mb-1 text-muted small">Fecha Resolución</p>
 							<strong>{{ $ticket->fecha_resolucion?->format('d/m/Y H:i') ?? '-' }}</strong>
 						</div>
+					</div>
+
+					<hr class="my-4">
+					<h5>Adjuntos del ticket</h5>
+					<div class="row">
+						@foreach($ticket->attachments as $attachment)
+							<div class="col-md-3 mb-3">
+								@if(str_starts_with($attachment->mime_type, 'image/'))
+									<a href="{{ Storage::url($attachment->file_path) }}" target="_blank">
+										<img src="{{ Storage::url($attachment->file_path) }}" class="img-fluid rounded shadow-sm" style="max-height: 180px; object-fit: cover;">
+									</a>
+								@else
+									<a href="{{ Storage::url($attachment->file_path) }}" target="_blank" class="btn btn-outline-primary d-block text-truncate">
+										{{ $attachment->original_name }}
+									</a>
+								@endif
+								<small class="text-muted">{{ $attachment->original_name }}</small>
+
+								@if($attachment->ai_status === 'ok')
+									<div class="small mt-2">
+										<strong>Diagnóstico IA:</strong>
+										<div>{{ $attachment->ai_technical_description }}</div>
+									</div>
+
+									@if($attachment->ai_ocr_text)
+										<div class="small mt-1">
+											<strong>OCR:</strong>
+											<div class="text-muted">{{ $attachment->ai_ocr_text }}</div>
+										</div>
+									@endif
+
+									@if(!empty($attachment->ai_possible_causes))
+										<div class="small mt-1">
+											<strong>Causas probables:</strong>
+											<div class="text-muted">{{ is_array($attachment->ai_possible_causes) ? implode(', ', $attachment->ai_possible_causes) : $attachment->ai_possible_causes }}</div>
+										</div>
+									@endif
+
+									@if($attachment->ai_suggested_category)
+										<div class="small mt-1">
+											<strong>Categoría sugerida:</strong>
+											<span class="text-muted">{{ $attachment->ai_suggested_category }}</span>
+										</div>
+									@endif
+								@elseif($attachment->ai_status === 'error')
+									<div class="small text-danger mt-2">
+										No se pudo analizar con IA: {{ $attachment->ai_error }}
+									</div>
+								@endif
+							</div>
+						@endforeach
 					</div>
 				</div>
 
